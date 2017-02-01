@@ -20,6 +20,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <helloworld-lib.version>1.0.1</helloworld-lib.version>
     </properties>
 
 
@@ -54,6 +55,35 @@
         </pluginRepository>
     </pluginRepositories>
 
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>de.e2</groupId>
+                    <artifactId>helloworld-lib</artifactId>
+                    <version>${helloworld-lib.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>jenkins</id>
+            <dependencies>
+                <dependency>
+                    <groupId>de.e2</groupId>
+                    <artifactId>helloworld-lib</artifactId>
+                    <version>${helloworld-lib.version}</version>
+                    <scope>system</scope>
+                    <systemPath>${basedir}/target/copy/helloworld-lib-${helloworld-lib.version}.jar</systemPath>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+
+
     <dependencies>
         <!-- Compile -->
         <dependency>
@@ -81,6 +111,18 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
