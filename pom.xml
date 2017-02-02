@@ -5,7 +5,7 @@
 
     <groupId>de.e2</groupId>
     <artifactId>helloworld-app</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>HelloWorld-App</name>
 
@@ -20,18 +20,28 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <helloworld-lib.version>1.0.1</helloworld-lib.version>
     </properties>
 
 
     <repositories>
         <repository>
             <id>nexus</id>
-            <name>Own Nexus</name>
+            <name>Nexus</name>
             <layout>default</layout>
             <url>http://localhost:8081/repository/maven-public/</url>
+            <snapshots>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
         </repository>
     </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>nexus</id>
+            <name>Nexus</name>
+            <url>http://localhost:8081/repository/maven-public/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <distributionManagement>
         <repository>
@@ -44,16 +54,6 @@
         </snapshotRepository>
     </distributionManagement>
 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>nexus</id>
-            <name>Spring Snapshots</name>
-            <url>http://localhost:8081/repository/maven-public/</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
 
 
     <dependencies>
@@ -61,7 +61,7 @@
         <dependency>
             <groupId>de.e2</groupId>
             <artifactId>helloworld-lib</artifactId>
-            <version>1.0.1</version>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -101,29 +101,16 @@
 
     <profiles>
         <profile>
-            <id>default</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>de.e2</groupId>
-                    <artifactId>helloworld-lib</artifactId>
-                    <version>${helloworld-lib.version}</version>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
             <id>jenkins</id>
-            <dependencies>
-                <dependency>
-                    <groupId>de.e2</groupId>
-                    <artifactId>helloworld-lib</artifactId>
-                    <version>${helloworld-lib.version}</version>
-                    <scope>system</scope>
-                    <systemPath>${basedir}/target/copy/helloworld-lib-${helloworld-lib.version}.jar</systemPath>
-                </dependency>
-            </dependencies>
+            <activation>
+                <property>
+                    <name>env.BUILD_NUMBER</name>
+                </property>
+            </activation>
+
+            <properties>
+                <nexus.home>http://nexus:8081/repository</nexus.home>
+            </properties>
         </profile>
         <profile>
             <id>sonar</id>
@@ -133,6 +120,7 @@
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>cobertura-maven-plugin</artifactId>
                         <configuration>
+                            <check></check>
                             <instrumentation>
                                 <includes>
                                     <include>**/*.class</include>
