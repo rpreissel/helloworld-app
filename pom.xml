@@ -20,6 +20,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <nexus.home>http://localhost:8081/repository</nexus.home>
     </properties>
 
 
@@ -28,7 +29,7 @@
             <id>nexus</id>
             <name>Nexus</name>
             <layout>default</layout>
-            <url>http://localhost:8081/repository/maven-public/</url>
+            <url>${nexus.home}/maven-public/</url>
             <snapshots>
                 <updatePolicy>always</updatePolicy>
             </snapshots>
@@ -39,18 +40,18 @@
         <pluginRepository>
             <id>nexus</id>
             <name>Nexus</name>
-            <url>http://localhost:8081/repository/maven-public/</url>
+            <url>${nexus.home}/maven-public/</url>
         </pluginRepository>
     </pluginRepositories>
 
     <distributionManagement>
         <repository>
             <id>nexus-releases</id>
-            <url>http://localhost:8081/repository/maven-releases/</url>
+            <url>${nexus.home}/maven-releases/</url>
         </repository>
         <snapshotRepository>
             <id>nexus-snapshots</id>
-            <url>http://localhost:8081/repository/maven-snapshots/</url>
+            <url>${nexus.home}/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
