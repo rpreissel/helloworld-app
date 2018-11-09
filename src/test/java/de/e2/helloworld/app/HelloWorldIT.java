@@ -1,6 +1,5 @@
 package de.e2.helloworld.app;
 
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +10,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Map;
 
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasSize;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
@@ -27,9 +23,11 @@ public class HelloWorldIT {
     @Test
     public void helloMessage() {
         Map<String, String> helloMessage = helloWorldController.hello("Rene");
-        assertThat(helloMessage.keySet(), hasSize(1));
-        assertThat(helloMessage.keySet(), contains("message"));
-        assertThat(helloMessage.get("message"), containsString("Rene"));
+        assertAll("message",
+                () -> assertEquals(helloMessage.keySet().size(), 1),
+                () -> assertTrue(helloMessage.keySet().contains("message")),
+                () -> assertTrue(helloMessage.get("message").contains("Rene"))
+        );
     }
 
 }
